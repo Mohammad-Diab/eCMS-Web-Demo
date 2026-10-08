@@ -1,0 +1,570 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.ico"> 
+    <link rel="stylesheet" href="assets/lib/bootstrap/css/rtl.bootstrap.min.css">
+    <link rel="stylesheet" href="assets/lib/fontawesome/css/all.css">
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid.min.css" />
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid-theme.min.css" />
+    <link rel="stylesheet" href="assets/lib/tempusdominus/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/font.css">
+    <title>غرفة الطبيب</title>
+</head>
+
+<body dir="rtl">
+    <div id="loadingPanal" class="justify-content-center" style="display: none;">
+        <div style="border: solid black 1px;" class="m-auto bg-dark text-light px-5 py-3">
+            <div class="spinner-border spinner-border-xl ml-3" style="width: 2rem; height: 2rem;" role="status">
+                <span class="sr-only">الرجاء الانتظار ...</span>
+            </div>
+            <span style="font-size: 20px;position: relative; top: -3px;">الرجاء الانتظار ...</span>
+        </div>
+    </div>
+
+    <!-- confirmDialog -->
+    <div id="confirmDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="enter-patient-to-doctor" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="confirmDialogHeader" class="modal-title">العنوان</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <h4 id="confirmPatientText">نص السؤال</h4>
+                        <div id="confirmPatientNameDiv" class="form-group col-12">
+                            <label for="confirmPatientName">اسم المريض</label>
+                            <input id="confirmPatientName" type="text" class="form-control" placeholder="اسم المريض" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="confirmDialogSaveBtn">تأكيد</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء الامر</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end confirmDialog -->
+
+    <div id="PastVisits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="showVisitesLog-btn" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: darkseagreen;">
+                    <h4 class="modal-title">
+                        <span>سجل الزيارات السابقة</span>
+                        <span id="visitLogPatientName"></span>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="pastVisitBody" style="font-size: 1.2rem;" class="modal-body px-4">
+
+
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="confirmDialogSaveBtn">تأكيد</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء الامر</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div id="noteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="note-modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="noteModalHeader" class="modal-title">إضافة ملاحظة جديدة</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="noteArabicName">اسم نوع الملاحظة العربي</label>
+                            <input id="noteArabicName" type="text" class="form-control" placeholder="الاسم العربي" oninput="resetValidationError('noteArabicName')" required>
+                            <div class="invalid-tooltip">
+                                قيمة غير صالحة
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="noteEnglishName">اسم نوع الملاحظة الانجليزي</label>
+                            <input id="noteEnglishName" type="text" class="form-control" placeholder="الاسم الانجليزي" oninput="resetValidationError('noteEnglishName')" required>
+                            <div class="invalid-tooltip">
+                                قيمة غير صالحة
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="noteNoteText">الملاحظة</label>
+                            <textarea id="noteNoteText" class="form-control" placeholder="الملاحظة" rows="3" oninput="resetValidationError('noteNoteText')"></textarea>
+                            <div class="invalid-tooltip">
+                                قيمة غير صالحة
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="noteModalSaveBtn" type="button" class="btn btn-success" data-toggle="modal">حفظ</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء الامر</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewImage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cancel-visit" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">عرض مرفق</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <img id="attachmentViewerImage" src="" alt="Attachment Viewer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="attachmentProperties" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">خواص مرفق</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <ul id="attachmentPropertiesList" class="list-group list-group-flush p-0">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="eyeReportLog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">فحص العين</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <div id="reportsListDiv" class="btn-group dropright">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                رقم الفحص
+                            </button>
+                            <div id="reportsList" class="dropdown-menu">
+                                <a class="dropdown-item" href="#">فحص 1</a>
+                                <a class="dropdown-item" href="#">فحص 2</a>
+                                <a class="dropdown-item" href="#">فحص 3</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="showAddEyeReportLog()">
+                            <span class="fa fa-plus ml-1" style="vertical-align: middle;"></span>
+                            <span>ادخال فحص العين يدويا</span>
+                        </button>
+                    </div>
+                    <h3 id="noReportsInfo" class="text-center text-muted my-4" style="display: none;">
+                        لا يوجد تقارير سابقة
+                    </h3>
+                    <div id="reportBody" style="display: none;">
+                        <h4 id="reportBodyTitle" class="mb-3">فحص 1</h4>
+                        <div class="row" style="font-size: 18px;">
+                            <div id="reportBodyR" class="col">
+                                <h5>العين اليمنى R</h5>
+                                <table class="table text-center dir-ltr table-bordered">
+
+                                    <tbody>
+                                        <tr class="bg-gray">
+                                            <td class="bg-pattren text-light"></td>
+                                            <td class="font-weight-bold">S</td>
+                                            <td class="font-weight-bold">C</td>
+                                            <td class="font-weight-bold">A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td id="eyeRS">1</td>
+                                            <td id="eyeRC">1</td>
+                                            <td id="eyeRA">1</td>
+                                        </tr>
+                                        <tr class="bg-gray">
+                                            <td class="bg-pattren text-light"></td>
+                                            <td class="font-weight-bold">MM</td>
+                                            <td class="font-weight-bold">D</td>
+                                            <td class="font-weight-bold">A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td id="eyeRMM1">2.25</td>
+                                            <td id="eyeRD1">2.15</td>
+                                            <td id="eyeRA1">1.2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td id="eyeRMM2">1.25</td>
+                                            <td id="eyeRD2">1.3</td>
+                                            <td id="eyeRA2">1.7</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-gray font-weight-bold">AV</td>
+                                            <td id="eyeRAV">1.25</td>
+                                            <td class="">-</td>
+                                            <td class="">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-gray font-weight-bold">CYL</td>
+                                            <td class="">-</td>
+                                            <td id="eyeRCYL1">1.26</td>
+                                            <td id="eyeRCYL2">2.1</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <label for="eyeReportRightNote">ملاحظات</label>
+                                    <textarea id="eyeReportRightNote" rows="3" class="form-control" placeholder="ملاحظات" oninput="resetValidationError('eyeReportRightNote')"></textarea>
+                                    <div class="invalid-tooltip">
+                                        قيمة غير صالحة
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="saveEyeReportR-btn" type="button" style="min-width: 80px;" class="btn btn-primary" data-fileName="" onclick="saveEyeReport(this, 'eyeReportRightNote')">حفظ</button>
+                                    <button type="button" style="min-width: 80px;" class="btn btn-secondary">تجاهل</button>
+                                </div>
+                            </div>
+                            <div id="reportBodyL" class="col">
+                                <h5>العين اليسرى L</h5>
+                                <table class="table text-center dir-ltr table-bordered">
+
+                                    <body>
+                                        <tr class="bg-gray">
+                                            <td class="bg-pattren text-light"></td>
+                                            <td class="font-weight-bold">S</td>
+                                            <td class="font-weight-bold">C</td>
+                                            <td class="font-weight-bold">A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td id="eyeLS">1</td>
+                                            <td id="eyeLC">1</td>
+                                            <td id="eyeLA">1</td>
+                                        </tr>
+                                        <tr class="bg-gray">
+                                            <td class="bg-pattren text-light"></td>
+                                            <td class="font-weight-bold">MM</td>
+                                            <td class="font-weight-bold">D</td>
+                                            <td class="font-weight-bold">A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td id="eyeLMM1">2.25</td>
+                                            <td id="eyeLD1">2.15</td>
+                                            <td id="eyeLA1">1.2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td id="eyeLMM2">1.25</td>
+                                            <td id="eyeLD2">1.3</td>
+                                            <td id="eyeLA2">1.7</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-gray font-weight-bold">AV</td>
+                                            <td id="eyeLAV">1.25</td>
+                                            <td class="">-</td>
+                                            <td class="">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-gray font-weight-bold">CYL</td>
+                                            <td class="">-</td>
+                                            <td id="eyeLCYL1">1.26</td>
+                                            <td id="eyeLCYL2">2.1</td>
+                                        </tr>
+                                    </body>
+                                </table>
+                                <div class="form-group">
+                                    <label for="eyeReportLeftNote">ملاحظات</label>
+                                    <textarea id="eyeReportLeftNote" rows="3" class="form-control" placeholder="ملاحظات" oninput="resetValidationError('eyeReportLeftNote')"></textarea>
+                                    <div class="invalid-tooltip">
+                                        قيمة غير صالحة
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="saveEyeReportL-btn" type="button" style="min-width: 80px;" class="btn btn-primary" data-fileName="" onclick="saveEyeReport(this, 'eyeReportLeftNote')">حفظ</button>
+                                    <button type="button" style="min-width: 80px;" class="btn btn-secondary">تجاهل</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="eyeReportLogAdd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">اضافة نتيجة فحص العين يدويا</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <h4 class="mb-3">اضافة فحص جديد</h4>
+                        <div class="container" style="font-size: 18px;">
+                            <div class="form-group">
+                                <select id="eyeReportEye" class="form-control">
+                                    <option value="R">العين اليمنى R</option>
+                                    <option value="L">العين اليسرى L</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <table id="addEyeReport" class="table text-center dir-ltr table-bordered">
+
+                                    <body>
+                                        <tr class="bg-gray">
+                                            <td class="bg-pattren text-light w-25"></td>
+                                            <td class="font-weight-bold w-25">S</td>
+                                            <td class="font-weight-bold w-25">C</td>
+                                            <td class="font-weight-bold w-25">A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td data-cell="eyeRS">
+                                                <input id="addEyeRS" type="text" class="form-control" oninput="resetValidationError('addEyeRS'); eyeReportOnInput(this);" required>
+                                            </td>
+                                            <td data-cell="eyeRC">
+                                                <input id="addEyeRC" type="text" class="form-control" oninput="resetValidationError('addEyeRC'); eyeReportOnInput(this);" required>
+                                            </td>
+                                            <td data-cell="eyeRA">
+                                                <input id="addEyeRA" type="text" class="form-control" oninput="resetValidationError('addEyeRA'); eyeReportOnInput(this);" required>
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-gray">
+                                            <td class="bg-pattren text-light"></td>
+                                            <td class="font-weight-bold">MM</td>
+                                            <td class="font-weight-bold">D</td>
+                                            <td class="font-weight-bold">A</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td data-cell="eyeRMM1">
+                                                <input id="addEyeRMM1" type="text" class="form-control" oninput="resetValidationError('addEyeRMM1'); eyeReportOnInput(this); onchangeMM();" required>
+                                            </td>
+                                            <td data-cell="eyeRD1">
+                                                <input id="addEyeRD1" type="text" class="form-control" oninput="resetValidationError('addEyeRD1'); eyeReportOnInput(this); onchangeD();" required>
+                                            </td>
+                                            <td data-cell="eyeRA1">
+                                                <input id="addEyeRA1" type="text" class="form-control" oninput="resetValidationError('addEyeRA1'); eyeReportOnInput(this); onchangeA();" required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-pattren text-light"></td>
+                                            <td data-cell="eyeRMM2">
+                                                <input id="addEyeRMM2" type="text" class="form-control" oninput="resetValidationError('addEyeRMM2'); eyeReportOnInput(this); onchangeMM();" required>
+                                            </td>
+                                            <td data-cell="eyeRD2">
+                                                <input id="addEyeRD2" type="text" class="form-control" oninput="resetValidationError('addEyeRD2'); eyeReportOnInput(this); onchangeD();" required>
+                                            </td>
+                                            <td data-cell="eyeRA2">
+                                                <input id="addEyeRA2" type="text" class="form-control" oninput="resetValidationError('addEyeRA2'); eyeReportOnInput(this); onchangeA();" required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-gray font-weight-bold">AV</td>
+                                            <td data-cell="eyeRAV">
+                                                <input id="addEyeRAV" type="text" class="form-control" oninput="resetValidationError('addEyeRAV')" disabled>
+                                            </td>
+                                            <td class="">-</td>
+                                            <td class="">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-gray font-weight-bold">CYL</td>
+                                            <td class="">-</td>
+                                            <td data-cell="eyeRCYL1">
+                                                <input id="addEyeRCYL1" type="text" class="form-control" oninput="resetValidationError('addEyeRCYL1')" disabled>
+                                            </td>
+                                            <td data-cell="eyeRCYL2">
+                                                <input id="addEyeRCYL2" type="text" class="form-control" oninput="resetValidationError('addEyeRCYL2')" disabled>
+                                            </td>
+                                        </tr>
+                                    </body>
+                                </table>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="addEyeReportNote">ملاحظات</label>
+                                <textarea id="addEyeReportNote" rows="3" class="form-control" placeholder="ملاحظات" oninput="resetValidationError('addEyeReportNote')"></textarea>
+                                <div class="invalid-tooltip">
+                                    قيمة غير صالحة
+                                </div>
+                            </div>
+                            <div class="text-left">
+                                <button type="button" style="min-width: 80px;" class="btn btn-primary" onclick="AddNewReport()">حفظ</button>
+                                <button type="button" data-dismiss="modal" style="min-width: 80px;" class="btn btn-secondary">الغاء</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div style="display: none;" class="aside-overlay" onclick="hideHamburgerMenu();">
+
+        </div>
+        <aside id="sidebar" class="bg-dark">
+            <div class="mt-4 mb-2 sidebarImage">
+                <h4 class="text-center">
+                    <img src="assets/img/logo.svg" height="120" class="d-inline-block align-top" alt="eCMS Clinic">
+                </h4>
+            </div>
+            <hr class="bg-light mb-3" />
+            <h5 class="text-light m-3 headerTitle">
+                <span>مرحبا</span>
+                <span class="text-info font-weight-bold" id="user-full-name-span">د. سامر النجار</span>
+            </h5>
+            <hr class="bg-light mb-4" />
+            <ul class="list-unstyled pr-0">
+                <li style="text-align: right;" class="mt-2">
+                    <a id="patientsList" href="index.htm" class="link d-block my-1 pr-4 py-2">
+                        <i class="fas fa-address-card ml-3"></i>
+                        <span>قائمة المرضى</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="waitingRoom" href="waitingRoom.htm" class="link d-block my-1 py-2 pr-4">
+                        <i class="fas fa-clock ml-3"></i>
+                        <span>غرفة الانتظار</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="doctorRoom" href="doctorRoom.htm" class="link text-dark bg-light d-block my-1 py-2 pr-4">
+                        <i class="fa fa-user-md ml-3"></i>
+                        <span> غرفة الطبيب</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="canceledVisits" href="canceledVisits.htm" class="link d-block my-1 py-2 pr-4">
+                        <i class="fa fa-calendar-times ml-3"></i>
+                        <span>الزيارات الملغاة</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="logoutbtn" onclick="logout()" class="link d-block my-1 py-2 pr-4 text-danger">
+                        <i class="fas fa-sign-out-alt ml-3"></i>
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <main class="mainDiv">
+            <div class="pageHeaderImage bg-light">
+                <img src="assets/img/logo-hor.svg" alt="eCMS Clinic" />
+            </div>
+            <div class="container" style="max-width: unset; padding: 0;">
+                <div class="navbar navbar-dark bg-light">
+                    <div style="width: 100%;">
+                        <button class="btn btn-dark ml-2 nav-button d-inline-block d-lg-none" data-toggle="modal" onclick="showHamburgerMenu()" title="فتح القائمة">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button class="btn btn-dark ml-2 nav-button visit-action" data-toggle="modal" id="eyeReportLog-btn" onclick="showEyeReportLog(1)" title="فحص العين">
+                            <i class="fas fa-medkit"></i>
+                            <span class="d-none d-lg-inline-block">فحص العين</span>
+                        </button>
+                        <button class="btn btn-dark ml-2 nav-button visit-action" data-toggle="modal" onclick="showVisitesLog()" title="سجل الزيارات">
+                            <i class="fas fa-medkit"></i>
+                            <span class="d-none d-lg-inline-block">سجل الزيارات</span>
+                        </button>
+                        <button id="addWaitingRoomButton" class="btn btn-warning ml-2 nav-button visit-action" data-toggle="modal" onclick="returnToWaitingRoom()" title="اعادة لغرفة الانتظار">
+                            <i class="fas fa-eye"></i>
+                            <span class="d-none d-lg-inline-block">اعادة لغرفة الانتظار</span>
+                        </button>
+                        <button class="btn btn-danger ml-2 nav-button visit-action" data-toggle="modal" onclick="finishVisit()" title="انهاء الزيارة">
+                            <i class="fa fa-user-times"></i>
+                            <span class="d-none d-lg-inline-block">انهاء الزيارة</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="noPatientInRoom" class="text-center text-muted my-5" style="display: none;">
+                <h3>لا يوجد مريض في غرفة الطبيب حالياً</h3>
+                <p>أدخل مريضاً من <a href="waitingRoom.htm">غرفة الانتظار</a>.</p>
+            </div>
+            <div id="doctor-room">
+                <div class="row p-2 mx-auto my-4 bg-light" style="font-size: 20px;width: 95%; box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.28)" id="patient-info">
+                    <div class="col-12 col-lg-6 pr-2 my-1">
+                        <span>اسم المريض:</span>
+                        <span class="font-weight-bold" id="drRoomPatientName"></span>
+                    </div>
+                    <div class="col-12 col-lg-6 pr-2 my-1">
+                        <span>العمر:</span>
+                        <span class="font-weight-bold" id="drRoomPatientAge"></span>
+                    </div>
+                    <div class="col-12 col-lg-6 pr-2 my-1">
+                        <span>وقت الوصول للعيادة:</span>
+                        <span class="font-weight-bold" id="drRoomArrivedTime"></span>
+                    </div>
+                    <div class="col-12 col-lg-6 pr-2 my-1">
+                        <span>وقت الدخول لغرفة الفحص:</span>
+                        <span class="font-weight-bold" id="drRoomEnterTime"></span>
+                    </div>
+                    <div class="col-12 col-lg-6 pr-2 my-1">
+                        <span>تاريخ آخر زيارة:</span>
+                        <span class="font-weight-bold" id="drRoomLastVisit"></span>
+                    </div>
+                </div>
+                <h2 class="mt-4 px-2 d-inline-block">
+                    الملاحظات
+                </h2>
+                <ul id="notesList" class="notes">
+                    <li id="noteAddButton" class="add-note text-center">
+                        <div href="#" title="اضافة ملاحظة جديدة" onclick="showAddNewNoteModal()">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </li>
+                    <!--<li class="my-note a3">
+                        <div onclick="showEditNoteModal(3)">
+                            <h5 class="note-header">
+                                <span>شكوى رئيسية</span>
+                                <a class="float-left text-danger" onclick="showDeleteNoteConfirmModal(3)" href="#">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </h5>
+                            <p>I have created my first design #29/1 </p>
+                        </div>
+                    </li>-->
+                </ul>
+            </div>
+        </main>
+        <footer style="position: fixed; right: 0; left: 0; bottom: 0; z-index: 1001;" class="text-white bg-dark py-2 text-center">
+            <span class="fas fa-code text-info"></span> بكل الـ
+            <span class="fas fa-heart text-danger"></span> بواسطة
+            <a target="_blank" class="dark-link" href="https://www.linkedin.com/in/mohammaddiab0/">Mohammad Diab</a>.
+        </footer>
+    </div>
+    <script src="assets/lib/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/lib/bootstrap/js/popper.min.js"></script>
+    <script src="assets/lib/bootstrap/js/rtl.bootstrap.min.js"></script>
+    <script src="assets/lib/jsgrid/jsgrid.min.js"></script>
+    <script src="assets/lib/momentjs/moment-with-locales.js"></script>
+    <script src="assets/lib/tempusdominus/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/demo-backend.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadDoctorRoomInfo();
+        })
+    </script>
+</body>
+
+</html>

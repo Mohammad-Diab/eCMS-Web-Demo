@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.ico"> 
+    <link rel="stylesheet" href="assets/lib/bootstrap/css/rtl.bootstrap.min.css">
+    <link rel="stylesheet" href="assets/lib/fontawesome/css/all.css">
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid.min.css" />
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid-theme.min.css" />
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="assets/css/font.css">
+    <title>تسجيل الدخول</title>
+</head>
+
+<body dir="rtl">
+    <div class="page">
+        <main class="container h-90vh" style="min-height: 400px; margin-bottom: 64px; min-width: 320px;">
+            <div class="d-flex align-items-center" style="height: 90vh;">
+                <div class="col-s-11 col-md-10 col-lg-8 mx-auto px-4 py-2 login-form form-shadow">
+                    <form id="login_form" method="POST">
+                        <div style="text-align: center;" class="mb-4">
+                            <img src="assets/img/logo.svg" width="196" height="196" alt="eCMS Clinic">
+                        </div>
+                        <div class="my-3 px-3">
+                            <div class="form-group">
+                                <label for="username">ادخل اسم المستخدم:</label>
+                                <input style="background-color: #e8f0fe;" class="form-control" name="username" type="text" placeholder="اسم المستخدم" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="password">وهنا كلمة المرور:</label>
+                                <input style="background-color: #e8f0fe;" class="form-control" name="password" type="password" placeholder="كلمة المرور" required />
+                            </div>
+                        </div>
+                        <div style="overflow: hidden;" class="form-group mt-4 mb-3 px-3">
+                            <button style="min-width: 128px; float: left;" class="btn btn-info" type="button" onclick="window.location.href = 'index.htm'" name="submit">دخول</button>
+                        </div>
+                        <p class="text-muted text-center small px-3 mb-0">نسخة تجريبية ببيانات وهمية: اضغط «دخول» مباشرةً.</p>
+                    </form>
+                </div>
+            </div>
+        </main>
+        <footer style="position: fixed; right: 0; left: 0; bottom: 0;" class="text-white bg-dark py-2 text-center">
+            <span class="fas fa-code text-info"></span> بكل الـ
+            <span class="fas fa-heart text-danger"></span> بواسطة
+            <a target="_blank" class="dark-link" href="https://www.linkedin.com/in/mohammaddiab0/">Mohammad Diab</a>.
+        </footer>
+    </div>
+    <script src="assets/lib/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/lib/bootstrap/js/popper.min.js"></script>
+    <script src="assets/lib/bootstrap/js/rtl.bootstrap.min.js"></script>
+</body>
+
+</html>

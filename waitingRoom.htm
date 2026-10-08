@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.ico"> 
+    <link rel="stylesheet" href="assets/lib/bootstrap/css/rtl.bootstrap.min.css">
+    <link rel="stylesheet" href="assets/lib/fontawesome/css/all.css">
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid.min.css" />
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid-theme.min.css" />
+    <link rel="stylesheet" href="assets/lib/tempusdominus/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/font.css">
+    <title>غرفة الانتظار</title>
+</head>
+
+<body dir="rtl">
+    <div id="loadingPanal" class="justify-content-center" style="display: none;">
+        <div style="border: solid black 1px;" class="m-auto bg-dark text-light px-5 py-3">
+            <div class="spinner-border spinner-border-xl ml-3" style="width: 2rem; height: 2rem;" role="status">
+                <span class="sr-only">الرجاء الانتظار ...</span>
+            </div>
+            <span style="font-size: 20px;position: relative; top: -3px;">الرجاء الانتظار ...</span>
+        </div>
+    </div>
+
+    <!-- enterpatient -->
+    <div id="enterPatient" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="enter-patient-to-doctor" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">إدخال المريض </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <h4>إدخال المريض لغرفة الطبيب ؟</h4>
+                        <div class="form-group col-12">
+                            <label for="enterName">اسم المريض</label>
+                            <input id="enterName" type="text" class="form-control" placeholder="اسم المريض" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="enterPatientToDoctor()">تأكيد</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء الامر</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- endenter -->
+
+    <!-- cancelVisit -->
+    <div id="cancelVisit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cancel-visit" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">إلغاء زيارة مريض</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h4>إلغاء زيارة المريض</h4>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="cancelName">اسم المريض</label>
+                            <input id="cancelName" type="text" class="form-control" placeholder="اسم المريض" disabled>
+                        </div>
+
+                        <div class="form-group col-12">
+                            <label for="cancelReason">سبب إلغاء الزيارة</label>
+                            <input id="cancelReason" type="text" class="form-control" oninput="resetValidationError('cancelReason')" placeholder="سبب الإلغاء" required>
+                            <div class="invalid-tooltip">
+                                قيمة غير صالحة
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-toggle="modal" onclick="PatientCancelVisit()">تأكيد</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء الامر</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- endcancel -->
+
+    <!-- logPatient -->
+    <div id="logPatient" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="logPatientModalHeader" class="modal-title">إضافة / تعديل سجل زيارة مريض</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="mb-4">سجل زيارة</h3>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <h5> معلومات المريض</h5>
+                            <div class="form-group col-md-12">
+                                <label for="logNumber">الرقم</label>
+                                <input id="logNumber" type="text" class="form-control" placeholder="رقم المريض" disabled>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label for="logName">اسم المريض</label>
+                                <input id="logName" type="text" class="form-control" placeholder="اسم المريض" disabled>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label for="logLastVisit">آخر زياة منذ</label>
+                                <input id="logLastVisit" type="text" class="form-control" placeholder="تاريخ آخر زيارة" disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>معلومات الزيارة</h5>
+                            <div class="form-group col-md-12">
+                                <label for="logDrName">اسم الطبيب</label>
+                                <select id="logDrName" class="form-control" placeholder="اسم الطبيب" required>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="logVisitReason">طبيعة الزيارة</label>
+                                <select id="logVisitReason" class="form-control" placeholder="طبيعة الزيارة" required>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="logVisitTime"> وقت الوصول</label>
+                                <div class="input-group date" id="logVisitTime" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#logVisitTime" placeholder="الوقت الحالي" required/>
+                                    <div class="input-group-append" data-target="#logVisitTime" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="padding: 0 1.25rem;" class="form-group col-md-12">
+                            <label for="logNote">ملاحظات</label>
+                            <textarea id="logNote" class="form-control" placeholder="ملاحظات الطبيب" rows="3"></textarea>
+                            <div class="invalid-tooltip">
+                                قيمة غير صالحة
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="logPatientSaveBtn">حفظ</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء الأمر</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- endlogPatient -->
+
+
+    <div class="page">
+        <div style="display: none;" class="aside-overlay" onclick="hideHamburgerMenu();">
+
+        </div>
+        <aside id="sidebar" class="bg-dark">
+            <div class="mt-4 mb-2 sidebarImage">
+                <h4 class="text-center">
+                    <img src="assets/img/logo.svg" height="120" class="d-inline-block align-top" alt="eCMS Clinic">
+                </h4>
+            </div>
+            <hr class="bg-light mb-3" />
+            <h5 class="text-light m-3 headerTitle">
+                <span>مرحبا</span>
+                <span class="text-info font-weight-bold" id="user-full-name-span">د. سامر النجار</span>
+            </h5>
+            <hr class="bg-light mb-4" />
+            <ul class="list-unstyled pr-0">
+                <li style="text-align: right;" class="mt-2">
+                    <a id="patientsList" href="index.htm" class="link d-block my-1 pr-4 py-2">
+                        <i class="fas fa-address-card ml-3"></i>
+                        <span>قائمة المرضى</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="waitingRoom" href="waitingRoom.htm" class="text-dark bg-light link d-block my-1 py-2 pr-4">
+                        <i class="fas fa-clock ml-3"></i>
+                        <span>غرفة الانتظار</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="doctorRoom" href="doctorRoom.htm" class="link d-block my-1 py-2 pr-4">
+                        <i class="fa fa-user-md ml-3"></i>
+                        <span> غرفة الطبيب</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="canceledVisits" href="canceledVisits.htm" class="link d-block my-1 py-2 pr-4">
+                        <i class="fa fa-calendar-times ml-3"></i>
+                        <span>الزيارات الملغاة</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="logoutbtn" onclick="logout()" class="link d-block my-1 py-2 pr-4 text-danger">
+                        <i class="fas fa-sign-out-alt ml-3"></i>
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <main class="mainDiv">
+            <div class="pageHeaderImage bg-light">
+                <img src="assets/img/logo-hor.svg" alt="eCMS Clinic" />
+            </div>
+            <div class="container" style="max-width: unset; padding: 0;">
+                <div class="navbar navbar-dark bg-light">
+                    <div style="width: 100%;">
+                        <button class="btn btn-dark ml-2 nav-button d-inline-block d-lg-none" data-toggle="modal" onclick="showHamburgerMenu()" title="فتح القائمة">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button class="btn btn-dark ml-2 nav-button" data-toggle="modal" onclick="showEnterPatientModal()" title="إدخال المريض لغرفة الطبيب">
+                            <i class="fas fa-medkit"></i>
+                            <span class="d-none d-lg-inline-block">أدخل لغرفة الطبيب</span>
+                        </button>
+                        <button id="addWaitingRoomButton" class="btn btn-dark ml-2 nav-button" data-toggle="modal" onclick="showAddVisitLogModal(true)" title="تعديل سجل الزيارة">
+                            <i class="fas fa-eye"></i>
+                            <span class="d-none d-lg-inline-block">تعديل سجل الزيارة</span>
+                        </button>
+                        <button class="btn btn-warning ml-2 nav-button" data-toggle="modal" onclick="showCancelVisitModal()" title="إلغاء الزيارة">
+                            <i class="fa fa-user-times"></i>
+                            <span class="d-none d-lg-inline-block">الغاء الزيارة</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="waiting-patients-list">
+
+            </div>
+        </main>
+        <footer style="position: fixed; right: 0; left: 0; bottom: 0; z-index: 1001;" class="text-white bg-dark py-2 text-center">
+            <span class="fas fa-code text-info"></span> بكل الـ
+            <span class="fas fa-heart text-danger"></span> بواسطة
+            <a target="_blank" class="dark-link" href="https://www.linkedin.com/in/mohammaddiab0/">Mohammad Diab</a>.
+        </footer>
+    </div>
+    <script src="assets/lib/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/lib/bootstrap/js/popper.min.js"></script>
+    <script src="assets/lib/bootstrap/js/rtl.bootstrap.min.js"></script>
+    <script src="assets/lib/jsgrid/jsgrid.min.js"></script>
+    <script src="assets/lib/momentjs/moment-with-locales.js"></script>
+    <script src="assets/lib/tempusdominus/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/demo-backend.js"></script>
+    <script>
+        loadWaitingRoomPage();
+        $(function() {
+            $('#logVisitTime').datetimepicker({
+                format: 'LT'
+            });
+        });
+    </script>
+</body>
+
+</html>

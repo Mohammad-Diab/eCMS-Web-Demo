@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.ico"> 
+    <link rel="stylesheet" href="assets/lib/bootstrap/css/rtl.bootstrap.min.css">
+    <link rel="stylesheet" href="assets/lib/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid.min.css" />
+    <link rel="stylesheet" href="assets/lib/jsgrid/jsgrid-theme.min.css" />
+    <link rel="stylesheet" href="assets/lib/tempusdominus/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/font.css">
+    <style>
+        .jsgrid-selected-row .jsgrid-cell.jsgrid-cell {
+            cursor: default;
+        }
+    </style>
+    <title>الزيارات الملغاة</title>
+</head>
+
+<body dir="rtl">
+    <div id="loadingPanal" class="justify-content-center" style="display: none;">
+        <div style="border: solid black 1px;" class="m-auto bg-dark text-light px-5 py-3">
+            <div class="spinner-border spinner-border-xl ml-3" style="width: 2rem; height: 2rem;" role="status">
+                <span class="sr-only">الرجاء الانتظار ...</span>
+            </div>
+            <span style="font-size: 20px;position: relative; top: -3px;">الرجاء الانتظار ...</span>
+        </div>
+    </div>
+
+
+    <div class="page">
+        <div style="display: none;" class="aside-overlay" onclick="hideHamburgerMenu();">
+
+        </div>
+        <aside id="sidebar" class="bg-dark">
+            <div class="mt-4 mb-2 sidebarImage">
+                <h4 class="text-center">
+                    <img src="assets/img/logo.svg" height="120" class="d-inline-block align-top" alt="eCMS Clinic">
+                </h4>
+            </div>
+            <hr class="bg-light mb-3" />
+            <h5 class="text-light m-3 headerTitle">
+                <span>مرحبا</span>
+                <span class="text-info font-weight-bold" id="user-full-name-span"></span>
+            </h5>
+            <hr class="bg-light mb-4" />
+            <h6 class="text-light m-3 headerTitle" style="display: none;">القائمة الرئيسية</h6>
+            <ul class="list-unstyled pr-0">
+                <li style="text-align: right;" class="mt-2">
+                    <a id="patientsList" href="index.htm" class="link d-block my-1 pr-4 py-2">
+                        <i class="fas fa-address-card ml-3"></i>
+                        <span>قائمة المرضى</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="waitingRoom" href="waitingRoom.htm" class="link d-block my-1 py-2 pr-4">
+                        <i class="fas fa-clock ml-3"></i>
+                        <span>غرفة الانتظار</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="doctorRoom" href="doctorRoom.htm" class="link d-block my-1 py-2 pr-4">
+                        <i class="fa fa-user-md ml-3"></i>
+                        <span> غرفة الطبيب</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="canceledVisits" href="canceledVisits.htm" class="text-dark bg-light link d-block my-1 py-2 pr-4">
+                        <i class="fa fa-calendar-times ml-3"></i>
+                        <span>الزيارات الملغاة</span>
+                    </a>
+                </li>
+                <li style="text-align: right;" class="mt-2">
+                    <a id="logoutbtn" onclick="logout()" class="link d-block my-1 py-2 pr-4 text-danger">
+                        <i class="fas fa-sign-out-alt ml-3"></i>
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <main class="mainDiv">
+            <div class="pageHeaderImage bg-light">
+                <img src="assets/img/logo-hor.svg" alt="eCMS Clinic" />
+            </div>
+            <div class="container" style="max-width: unset; padding: 0;">
+                <div class="navbar navbar-dark bg-light">
+                    <div style="width: 100%;">
+                        <button class="btn btn-dark ml-2 nav-button d-inline-block d-lg-none" data-toggle="modal" onclick="showHamburgerMenu()" title="فتح القائمة">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="canceled-visit">
+                <div class="row p-2 mx-auto my-3 bg-light" style="font-size: 16px; width: 95%; box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.28)" id="patient-info">
+                    <div class="form-group col-md-12 mb-2">
+                        <label for="canceledDrName">اسم الطبيب</label>
+                        <select id="canceledDrName" class="form-control" placeholder="اسم الطبيب" required>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="canceled-from-date">من تاريخ</label>
+                        <div class="input-group date" id="canceled-from-date" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" placeholder="قبل 30 يوماً" data-target="#canceled-from-date" required />
+                            <div class="input-group-append" data-target="#canceled-from-date" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="canceled-to-date">الى تاريخ</label>
+                        <div class="input-group date" id="canceled-to-date" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" placeholder="اليوم" data-target="#canceled-to-date" required />
+                            <div class="input-group-append" data-target="#canceled-to-date" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 text-left my-2">
+                        <button style="min-width: 120px;" class="btn btn-primary" onclick="viewCanceledVisitList()">عرض</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="canceled-visit-list">
+
+            </div>
+        </main>
+        <footer style="position: fixed; right: 0; left: 0; bottom: 0; z-index: 1001;" class="text-white bg-dark py-2 text-center">
+            <span class="fas fa-code text-info"></span> بكل الـ
+            <span class="fas fa-heart text-danger"></span> بواسطة
+            <a target="_blank" class="dark-link" href="https://www.linkedin.com/in/mohammaddiab0/">Mohammad Diab</a>.
+        </footer>
+    </div>
+    <script src="assets/lib/jquery/jquery-3.4.1.min.js"></script>
+    <script src="assets/lib/bootstrap/js/popper.min.js"></script>
+    <script src="assets/lib/bootstrap/js/rtl.bootstrap.min.js"></script>
+    <script src="assets/lib/jsgrid/jsgrid.min.js"></script>
+    <script src="assets/lib/momentjs/moment-with-locales.min.js"></script>
+    <script src="assets/lib/tempusdominus/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/demo-data.js"></script>
+    <script src="assets/js/demo-backend.js"></script>
+    <script>
+        loadCanceledVisitPage();
+        $(function () {
+            startingUp('canceledvisits');
+            $('#canceled-from-date').datetimepicker({
+                format: 'L'
+            });
+            $('#canceled-to-date').datetimepicker({
+                format: 'L'
+            });
+            viewCanceledVisitList();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>eCMS Clinic</title>
+  <circle cx="120" cy="120" r="116" fill="#ffffff" stroke="#17a2b8" stroke-width="8"/>
+  <path d="M38 104 Q120 30 202 104 Q120 178 38 104 Z" fill="#e8f7fa" stroke="#17a2b8" stroke-width="7" stroke-linejoin="round"/>
+  <circle cx="120" cy="104" r="30" fill="#17a2b8"/>
+  <circle cx="120" cy="104" r="13" fill="#0b4f5c"/>
+  <circle cx="129" cy="95" r="6" fill="#ffffff"/>
+  <text x="120" y="176" text-anchor="middle" font-family="Segoe UI, Tahoma, Arial, sans-serif" font-size="38" font-weight="700" fill="#0b4f5c">eCMS</text>
+  <text x="120" y="208" text-anchor="middle" font-family="Segoe UI, Tahoma, Arial, sans-serif" font-size="22" fill="#17a2b8">Clinic</text>
+</svg>

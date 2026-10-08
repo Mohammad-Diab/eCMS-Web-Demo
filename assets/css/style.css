@@ -1,0 +1,432 @@
+html,
+body {
+    overflow: hidden;
+}
+
+.list-group {
+    padding-right: 0;
+}
+
+.link,
+.link:hover {
+    text-decoration: none;
+}
+
+.link:not(.text-dark),
+.link:hover {
+    color: white;
+}
+
+#sidebar {
+    transition: all 0.2s;
+    width: 240px;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.28);
+}
+
+#sidebar ul li a:hover {
+    background: royalblue;
+}
+
+#sidebar ul li.active > a {
+    background: royalblue;
+}
+
+body {
+    text-align: right;
+    font-family: "Tajawal", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.jsgrid-pager {
+    text-align: center;
+}
+
+.modal-dialog {
+    overflow-y: initial !important;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.close {
+    float: left !important;
+    margin: -1rem auto -1rem -1rem !important;
+}
+
+.modal-footer > :not(:last-child) {
+    margin-right: auto;
+    margin-left: 0.25rem;
+}
+
+.page-item:first-child .page-link {
+    margin-right: 0;
+    margin-left: auto;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.page-item:last-child .page-link {
+    margin-left: 0;
+    margin-right: auto;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+#loadingPanal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #343a4040;
+    display: flex;
+    flex-direction: column;
+}
+
+.jsgrid-header-row > .jsgrid-header-cell {
+    background: #23272b;
+    color: white;
+    font-weight: 500;
+}
+
+.jsgrid-grid-body {
+    overflow: auto !important;
+}
+
+.jsgrid-table tbody tr td:first-child {
+    font-size: 14px;
+}
+
+.nav-button {
+    min-width: 48px;
+    height: 36px;
+}
+
+.list-unstyled {
+    padding-right: 0;
+    overflow-y: auto;
+}
+
+.input-group > .custom-select:not(:last-child),
+.input-group > .form-control:not(:last-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.input-group > .input-group-append > .input-group-text {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.dark-link {
+    color: lightskyblue;
+}
+
+.dark-link:hover {
+    text-decoration: none;
+    color: deepskyblue;
+}
+
+.mainDiv {
+    width: calc(100% - 240px);
+    margin-right: 240px;
+    min-height: 400px;
+    margin-bottom: 64px;
+    min-width: 320px;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    transition: all 0.2s;
+}
+
+.pageHeaderImage {
+    width: 100%;
+    text-align: center;
+}
+
+.pageHeaderImage img {
+    max-height: 6.8rem;
+    max-width: 100%;
+}
+
+#attachmentAdd,
+#attachmentAddProperty,
+#viewImage,
+#attachmentProperties {
+    z-index: 1052;
+}
+
+.jsgrid-grid-header {
+    overflow-y: hidden;
+}
+
+.jsgrid-header-cell > div {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+}
+
+.jsgrid-cell > div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.page-item.active .page-link {
+    z-index: 0;
+}
+
+.custom-file-label:after {
+    left: 0;
+    right: auto;
+    border-radius: 0.25rem 0 0 0.25rem;
+    content: attr(title);
+    border-left: none;
+    border-right: inherit;
+}
+
+@media (max-width: 1140px) {
+    .mainDiv {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .aside-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #343a4040;
+        z-index: 999;
+    }
+
+    .menu {
+        display: inline-block !important;
+    }
+}
+
+@media (max-height: 480px) {
+    .sidebarImage {
+        display: none;
+    }
+
+    .list-unstyled {
+        margin-top: 1.25rem;
+    }
+
+    .headerTitle {
+        display: block !important;
+    }
+}
+
+/* notes */
+
+.notes {
+    font-size: 18px;
+    display: inline-block;
+    width: 100%;
+}
+
+.notes h2,
+.notes p {
+    padding-bottom: 10px;
+    margin: 0;
+}
+
+.my-note,
+.add-note {
+    list-style: none;
+    float: right;
+    margin: 15px;
+}
+
+.add-note {
+    padding: 36px;
+}
+
+.my-note > div {
+    text-decoration: none;
+    color: black;
+    height: 240px;
+    width: 240px;
+    display: block;
+    overflow-y: auto;
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.4);
+    position: relative;
+    transition: transform 0.15s linear;
+    background-color: white;
+    cursor: pointer;
+}
+
+.add-note > div {
+    text-decoration: none;
+    border-radius: 50%;
+    font-size: 92px;
+    line-height: 144px;
+    overflow: hidden;
+    border: 20px solid lightgray;
+    color: lightgray;
+    height: 168px;
+    width: 168px;
+    padding: 0;
+    position: relative;
+    transition: transform 0.15s linear;
+    background-color: white;
+    display: block;
+    cursor: pointer;
+}
+
+.my-note .note-header {
+    padding: 12px 16px;
+    margin: 0;
+}
+
+.my-note.a1 > div .note-header {
+    background: #ffe66e;
+}
+
+.my-note.a2 > div .note-header {
+    background: #a1ef9b;
+}
+
+.my-note.a3 > div .note-header {
+    background: #ffafdf;
+}
+
+.my-note.a4 > div .note-header {
+    background: #d7afff;
+}
+
+.my-note.a5 > div .note-header {
+    background: #9edfff;
+}
+
+.my-note.a6 > div .note-header {
+    background: #e0e0e0;
+}
+
+.my-note.a7 > div .note-header {
+    background: #767676;
+}
+
+.my-note.a8 > div .note-header {
+    background: #0084d0;
+}
+
+.my-note.a1 > div {
+    border: solid 1px #ffe66e;
+}
+
+.my-note.a2 > div {
+    border: solid 1px #a1ef9b;
+}
+
+.my-note.a3 > div {
+    border: solid 1px #ffafdf;
+}
+
+.my-note.a4 > div {
+    border: solid 1px #d7afff;
+}
+
+.my-note.a5 > div {
+    border: solid 1px #9edfff;
+}
+
+.my-note.a6 > div {
+    border: solid 1px #e0e0e0;
+}
+
+.my-note.a7 > div {
+    border: solid 1px #767676;
+}
+
+.my-note.a8 > div {
+    border: solid 1px #0084d0;
+}
+
+.my-note > div:hover,
+.my-note > div:focus {
+    box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.3);
+    transform: scale(1.15);
+    z-index: 5;
+}
+
+.card-group > .card:first-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.card-group > .card:last-child {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.card-group>.card+.card{
+    margin-right: 0;
+    border-right: 0;
+    border-left: 1px solid rgba(0,0,0,.125);
+}
+
+#logoutbtn{
+    cursor: pointer;
+}
+
+#logoutbtn:hover {
+    background-color: tomato !important;
+    color: white !important;
+}
+
+/* eye exam report (ported from the 2020 version) */
+.dir-ltr {
+    direction: ltr;
+}
+
+.bg-gray {
+    background-color: #eee;
+}
+
+.bg-pattren {
+    background: url(../img/table-background.png) repeat;
+}
+
+.dropright .dropdown-menu {
+    margin-left: 0;
+    margin-right: .125rem;
+}
+
+.dropright .dropdown-toggle::after {
+    margin-right: .5em;
+    margin-left: 0;
+    border-left: 0;
+    border-right: .3em solid;
+}
+
+.dropdown-menu {
+    text-align: right;
+}
+
+#attachmentViewerImage {
+    max-width: 100%;
+}
